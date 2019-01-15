@@ -1,7 +1,12 @@
 #!/bin/bash
 
-sudo apt install git stow --yes
-git clone https://github.com/revyakin/dotfiles $HOME/.dotfiles
+link_dotfiles () {
+    dir="$1"
+    for file in $( ls -A "$dir" | grep -vE '\.exclude*|\.git$|\.gitignore|.*.md' ) ; do
+        ln --symbolic --backup=numbered "$PWD/$dir/$file" "$HOME/$file"
+    done
+}
 
-cd .dotfiles
-stow bash
+link_dotfiles bash
+link_dotfiles tmux
+
